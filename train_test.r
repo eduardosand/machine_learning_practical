@@ -1,0 +1,20 @@
+sudo R
+library(klaR)
+library(e1071)
+library(getopt)
+library(e1071)
+library(kernlab)
+data(spam)
+testidx <- which(1:length(spam[,1])%%5 ==0)
+spamtrain <- spam[-testidx,]
+spamtest <- spam[testidx,]
+model <- svm(type~., data=spamtrain, kernel="polynomial")
+prediction <- predict(model, spamtest)
+table <- table(spamtest$type, prediction)
+pred <- (as.numeric(prediction), as.numeric(spamtest$type))
+perf <- performance(pred, "tpr", "fpr")
+plot(perf)
+model2 <- svm(type~., data=spamtrain, kernel="radial")
+prediction2 <- predict(model, spamtest)
+table2 <-table(spamtest$type, prediction2)
+predictionsum(table[1:2])
